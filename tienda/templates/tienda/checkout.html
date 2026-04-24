@@ -1,0 +1,118 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Finalizar Compra - LuxeStock{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 3rem auto; padding: 0 1rem;">
+    <h1 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 3rem; text-align: center;">Finalizar tu Compra
+    </h1>
+
+    <div style="display: grid; grid-template-columns: 1fr 400px; gap: 4rem; align-items: start;">
+        <!-- Formulario de Envío -->
+        <div class="card-premium" style="background: white; padding: 3rem;">
+            <h2
+                style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--primary); display: flex; align-items: center; gap: 0.75rem;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg>
+                Datos de Envío
+            </h2>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div style="display: grid; gap: 1.5rem;">
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem;">
+                            {{ field.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn-primary"
+                    style="width: 100%; justify-content: center; margin-top: 3rem; padding: 1.25rem; font-size: 1.1rem;">
+                    Continuar al Pago
+                </button>
+            </form>
+        </div>
+
+        <!-- Resumen del Pedido -->
+        <aside style="position: sticky; top: 100px;">
+            <div class="card-premium" style="background: white; padding: 2rem;">
+                <h3
+                    style="margin-bottom: 1.5rem; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                    Resumen del Pedido
+                </h3>
+
+                <div style="max-height: 400px; overflow-y: auto; margin-bottom: 2rem; display: grid; gap: 1rem;">
+                    {% for item in carrito.items.all %}
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div
+                            style="width: 50px; height: 50px; border-radius: 8px; overflow: hidden; background: #f8fafc; flex-shrink: 0;">
+                            {% if item.producto.imagen %}
+                            <img src="{{ item.producto.imagen.url }}"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                            {% endif %}
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="font-size: 0.9rem; color: var(--primary); margin: 0;">{{ item.producto.nombre }}
+                            </h4>
+                            <small style="color: var(--text-muted);">Cant: {{ item.cantidad }}</small>
+                        </div>
+                        <span style="font-weight: 600; font-size: 0.9rem;">S/ {{ item.subtotal }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 1.5rem; display: grid; gap: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Subtotal:</span>
+                        <span style="font-weight: 600;">S/ {{ carrito.total }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Envío:</span>
+                        <span style="color: var(--success); font-weight: 600;">Gratis</span>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--primary); font-size: 1.25rem; font-weight: 800; color: var(--primary);">
+                        <span>TOTAL:</span>
+                        <span>S/ {{ carrito.total }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'carrito_ver' %}"
+                style="display: block; text-align: center; margin-top: 1.5rem; color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+                &larr; Volver al Carrito
+            </a>
+        </aside>
+    </div>
+</div>
+
+<style>
+    .form-input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        font-family: inherit;
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+</style>
+{% endblock %}

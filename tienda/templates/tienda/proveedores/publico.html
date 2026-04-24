@@ -1,0 +1,154 @@
+{% extends "tienda/base.html" %}
+
+{% block content %}
+<div class="proveedores-publico">
+    <h1 class="text-center mb-5">🤝 Nuestros Proveedores</h1>
+    <p class="text-center mb-5">
+        Trabajamos con los mejores proveedores para garantizar calidad y variedad en nuestros productos.
+    </p>
+    
+    <div class="proveedores-grid">
+        {% for proveedor in proveedores %}
+        <div class="proveedor-card">
+            <div class="proveedor-logo">
+                <img src="{{ proveedor.logo_url }}" alt="{{ proveedor.nombre }}">
+            </div>
+            <div class="proveedor-info">
+                <h3>{{ proveedor.nombre }}</h3>
+                {% if proveedor.descripcion %}
+                <p class="proveedor-descripcion">{{ proveedor.descripcion }}</p>
+                {% endif %}
+                
+                <div class="proveedor-contacto">
+                    {% if proveedor.sitio_web %}
+                    <a href="{{ proveedor.sitio_web }}" target="_blank" class="btn-web">
+                    <i class="bi bi-globe-americas-fill"></i>    Visitar Sitio Web
+                    </a>
+                    {% endif %}
+                    
+                    {% if proveedor.direccion %}
+                    <div class="contacto-item">
+                        <i class="bi bi-geo-alt-fill"></i> {{ proveedor.direccion }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-proveedores">
+            <p>Próximamente información de nuestros proveedores.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.proveedores-publico {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.proveedores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.proveedor-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.proveedor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.proveedor-logo {
+    height: 150px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.proveedor-logo img {
+    max-width: 200px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+.proveedor-info {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.proveedor-info h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-size: 1.4rem;
+}
+
+.proveedor-descripcion {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.proveedor-contacto {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-web {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.btn-web:hover {
+    background: #2980b9;
+    text-decoration: none;
+    color: white;
+}
+
+.contacto-item {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.no-proveedores {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    color: #666;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .proveedores-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

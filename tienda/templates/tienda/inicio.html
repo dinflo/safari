@@ -1,0 +1,178 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Safari{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'tienda/css/inicio.css' %}">
+{% endblock %}
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1 class="hero-title">CREA IDENTIDAD CON NUESTRAS PRENDAS DE ALTA TENDENCIA</h1>
+            <p class="hero-description">
+                Revoluciona tu estilo de vestir, rastrea stock en múltiples 
+                locaciones, y crea tu oufit.
+            </p>
+            <div class="hero-buttons">
+                <a href="{% url 'proveedores_publico' %}" class="btn btn-primary">
+                    Nuestros proveedores
+                </a>
+                
+            </div>
+            <p class="hero-note">
+                Sin limites de imaginacion • Configuración gratis • Soporte 24/7
+            </p>
+        </div>
+        <div class="hero-image">
+            <div class="image-container">
+                <img src="{% static 'tienda/images/banner.jpg' %}" alt="Sistema de Inventario" />
+                <div class="image-badge">
+                    <span class="badge-icon">✓</span>
+                    <span class="badge-text">+300 Marcas Confían en Nosotros</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="stats-container">
+        <div class="stat-item">
+            <div class="stat-number">2,500+</div>
+            <div class="stat-label">Productos</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">1.2M+</div>
+            <div class="stat-label">Visitas</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">Tiempo Activo</div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="features-container">
+        <h2 class="section-title">Diseñado para clientes Modernos</h2>
+        <p class="section-subtitle">
+            Todo lo que necesitas para vestir tu marca favotita de ropa disponible en un solo lugar.
+        </p>
+        
+        <div class="features-grid">
+            
+            <!-- Feature 1: Stock Control -->
+            <div class="feature-card">
+                <div class="feature-icon" style="background: #E3F2FD;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1976D2" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M3 9h18M9 3v18"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Control de calidad</h3>
+                <p class="feature-description">
+                    Monitorea niveles de calidad en tiempo real a través de nuestro 
+                    catalogo.
+                </p>
+            </div>
+
+            <!-- Feature 2: Supplier Management -->
+            <div class="feature-card">
+                <div class="feature-icon" style="background: #FFF3E0;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F57C00" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Proveedores</h3>
+                <p class="feature-description">
+                    Nuestros proveedores son de las mas demandas
+                    del mercado con productos 100% originales
+                </p>
+            </div>
+
+            <!-- Feature 3: Real-Time Analytics -->
+            <div class="feature-card">
+                <div class="feature-icon" style="background: #F3E5F5;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B1FA2" stroke-width="2">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18 17V9M13 17V5M8 17v-3"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Control de calidad</h3>
+                <p class="feature-description">
+                    Realizamos el control de nuestra productos 
+                    junto a las criticas de nuestros clientes
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Quick Access Cards -->
+<section class="quick-access-section">
+    <div class="quick-access-container">
+        
+        <a class="access-card card-purple" href="{% url 'proveedores_publico' %}">
+            <div class="card-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="8.5" cy="7" r="4"/>
+                    <path d="M20 8v6M23 11h-6"/>
+                </svg>
+            </div>
+            <h3 class="card-title">Proveedores</h3>
+            <p class="card-description">Con Productos 100% confiables</p>
+            <span class="card-arrow">→</span>
+        </a>
+
+        <a class="access-card card-blue" href="#">
+            <div class="card-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                    <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+            </div>
+            <h3 class="card-title">Productos</h3>
+            <p class="card-description">Con productos 100% ORIGINALES</p>
+            <span class="card-arrow">→</span>
+        </a>
+
+        <a class="access-card card-green" href="#">
+            <div class="card-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+            </div>
+            <h3 class="card-title">Inventario</h3>
+            <p class="card-description">Con stock por talla, color y ubicación</p>
+            <span class="card-arrow">→</span>
+        </a>
+
+        <a class="access-card card-orange" href="#">
+            <div class="card-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    <polyline points="17 6 23 6 23 12"/>
+                </svg>
+            </div>
+            <h3 class="card-title">Movimientos</h3>
+            <p class="card-description">Entradas y salidas de mercadería cada dia</p>
+            <span class="card-arrow">→</span>
+        </a>
+
+    </div>
+</section>
+
+
+
+{% endblock %}

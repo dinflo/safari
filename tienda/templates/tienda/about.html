@@ -1,0 +1,181 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Acerca de Nosotros - LuxeStock{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'tienda/css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="about-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content-wrapper">
+        <div class="container">
+            <h1 class="hero-title">Creando el aufit perfecto para ti</h1>
+            <p class="hero-subtitle">
+                Nos apaciona crear identidades personales con prendas de vestir, con todas las que estan en alta demanda
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Mission Section -->
+<section class="mission-section">
+    <div class="container">
+        <h2 class="section-title">Ayudando personas a escalar a crear de mejores oufits y identidades originales.</h2>
+        <p class="section-description">
+            En un mundo donde cada decisión cuenta, proporcionamos las herramientas necesarias para que tu identidad 
+            de ropa alcance su máximo potencial.
+        </p>
+    </div>
+</section>
+
+<!-- Journey Timeline -->
+<section class="journey-section">
+    <div class="container">
+        <h2 class="journey-title">Nuestro Camino</h2>
+        
+        <div class="timeline">
+            <!-- Timeline Item 1 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Fundación</div>
+                    <h3 class="timeline-title">Fundación de la Empresa</h3>
+                    <p class="timeline-description">
+                        Comenzamos con una visión simple y de calidad: hacer que la vestimenta sea accesible 
+                        para todos las personas que buscan identidad.
+                    </p>
+                    <div class="timeline-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">Clientes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Crecimiento</div>
+                    <h3 class="timeline-title">Expansión de tienda</h3>
+                    <p class="timeline-description">
+                        Nuestras tiendas ya se encuentran en +5 locales en diferentes regiones
+                    </p>
+                    <div class="timeline-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">5+</div>
+                            <div class="stat-label">Tiendas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">Actualidad</div>
+                    <h3 class="timeline-title">Líder en Perú</h3>
+                    <p class="timeline-description">
+                        Hoy somos una de las tiendas  de ropa mas estable en toda la region
+                    </p>
+                    <div class="timeline-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">2,500+</div>
+                            <div class="stat-label">Clientes Activos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Core Values Section -->
+<section class="values-section">
+    <div class="container">
+        <h2 class="section-title-center">Nuestros Valores Fundamentales</h2>
+        <p class="section-subtitle-center">Los principios que guían cada decisión que tomamos.</p>
+        
+        <div class="values-grid">
+            
+            <!-- Value 1: Honestidad -->
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                </div>
+                <h3 class="value-title">Honestidad</h3>
+                <p class="value-description">
+                    Operamos con transparencia total. Nuestros clientes merecen precios claros, 
+                    comunicación honesta y soluciones que realmente funcionen.
+                </p>
+            </div>
+
+            <!-- Value 2: Integridad -->
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                </div>
+                <h3 class="value-title">Integridad</h3>
+                <p class="value-description">
+                    Hacemos lo correcto, incluso cuando nadie nos ve. La confianza de nuestros clientes 
+                    es nuestro activo más valioso.
+                </p>
+            </div>
+
+            <!-- Value 3: Innovación -->
+            <div class="value-card">
+                <div class="value-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </div>
+                <h3 class="value-title">Innovación</h3>
+                <p class="value-description">
+                    Nunca dejamos de mejorar. Cada día trabajamos en nuevas formas de hacer que tu 
+                    negocio sea más eficiente y rentable.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Stats Banner -->
+<section class="stats-banner">
+    <div class="container">
+        <div class="stats-grid-about">
+            
+            <div class="stat-item-about">
+                <div class="stat-number-about">2,500+</div>
+                <div class="stat-label-about">Clientes Satisfechos</div>
+            </div>
+
+            <div class="stat-item-about">
+                <div class="stat-number-about">15M+</div>
+                <div class="stat-label-about">Productos Gestionados</div>
+            </div>
+
+            <div class="stat-item-about">
+                <div class="stat-number-about">99.9%</div>
+                <div class="stat-label-about">Tiempo de Actividad</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

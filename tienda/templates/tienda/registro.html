@@ -1,0 +1,82 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Crear una Cuenta - LuxeStock{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 4rem auto; padding: 0 1rem;">
+    <div class="card-premium" style="padding: 2.5rem; background: white;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="color: var(--accent); margin-bottom: 1rem; display: inline-flex; justify-content: center;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="8.5" cy="7" r="4" />
+                    <line x1="20" y1="8" x2="20" y2="14" />
+                    <line x1="23" y1="11" x2="17" y2="11" />
+                </svg>
+            </div>
+            <h1 style="font-size: 1.8rem; color: var(--primary); margin-bottom: 0.5rem;">Crea tu Cuenta</h1>
+            <p style="color: var(--text-muted);">Unete a nuestra comunidad de moda exclusiva.</p>
+        </div>
+
+        <form method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label
+                    style="display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--primary);">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                <div style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem; line-height: 1.4;">
+                    {{ field.help_text|safe }}
+                </div>
+                {% endif %}
+                {% for error in field.errors %}
+                <small style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ error
+                    }}</small>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-primary"
+                style="width: 100%; justify-content: center; padding: 0.8rem; margin-top: 1rem;">
+                Registrarse
+            </button>
+        </form>
+
+        <div style="margin-top: 2rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                ¿Ya tienes una cuenta?
+                <a href="{% url 'login' %}"
+                    style="color: var(--accent); font-weight: 600; text-decoration: none;">Inicia Sesión</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+        border-color: var(--accent);
+    }
+
+    .form-group ul {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+</style>
+{% endblock %}

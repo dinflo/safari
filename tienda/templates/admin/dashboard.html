@@ -1,0 +1,421 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<style>
+    .dashboard-container {
+        padding: 20px;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-left: 5px solid;
+    }
+    
+    .stat-card.total-productos { border-left-color: #3498db; }
+    .stat-card.total-proveedores { border-left-color: #2ecc71; }
+    .stat-card.stock-bajo { border-left-color: #f39c12; }
+    .stat-card.productos-agotados { border-left-color: #e74c3c; }
+    
+    .stat-card h3 {
+        margin-top: 0;
+        color: #555;
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .stat-number {
+        font-size: 32px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    
+    .alert-list {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .alert-list h4 {
+        color: #856404;
+        margin-top: 0;
+    }
+    
+    .alert-list ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+    
+    .alert-list li {
+        margin-bottom: 5px;
+    }
+    
+    .alert-list a {
+        color: #856404;
+        text-decoration: underline;
+    }
+    
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    
+    @media (max-width: 1200px) {
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .chart-container {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .chart-container h3 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #333;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+    }
+    
+    .table-container {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow-x: auto;
+    }
+    
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .data-table th {
+        background-color: #f8f9fa;
+        text-align: left;
+        padding: 12px 15px;
+        font-weight: 600;
+        color: #495057;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .data-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: middle;
+    }
+    
+    .data-table tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .badge.entrada {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .badge.salida {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    
+    .quick-actions {
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+    
+    .quick-actions h3 {
+        margin-top: 0;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .action-btn {
+        padding: 10px 20px;
+        background: #3498db;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.3s;
+    }
+    
+    .action-btn:hover {
+        background: #2980b9;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .action-btn.entrada { background: #2ecc71; }
+    .action-btn.entrada:hover { background: #27ae60; }
+    
+    .action-btn.salida { background: #e74c3c; }
+    .action-btn.salida:hover { background: #c0392b; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h1>📊 Dashboard de Inventario</h1>
+    
+    <!-- Estadísticas principales -->
+    <div class="stats-grid">
+        <div class="stat-card total-productos">
+            <h3>Total de Productos</h3>
+            <div class="stat-number">{{ total_productos }}</div>
+            <p>Productos registrados en el sistema</p>
+        </div>
+        
+        <div class="stat-card total-proveedores">
+            <h3>Total de Proveedores</h3>
+            <div class="stat-number">{{ total_proveedores }}</div>
+            <p>Proveedores activos</p>
+        </div>
+        
+        <div class="stat-card stock-bajo">
+            <h3>Productos con Stock Bajo</h3>
+            <div class="stat-number">{{ stock_bajo }}</div>
+            <p>Necesitan reabastecimiento (≤ 5 unidades)</p>
+        </div>
+        
+        <div class="stat-card productos-agotados">
+            <h3>Productos Agotados</h3>
+            <div class="stat-number">{{ productos_agotados|length }}</div>
+            <p>Sin stock disponible</p>
+        </div>
+    </div>
+    
+    <!-- Alertas -->
+    {% if productos_bajo_stock %}
+    <div class="alert-list">
+        <h4>⚠️ Productos con Stock Bajo</h4>
+        <ul>
+            {% for producto in productos_bajo_stock %}
+            <li>
+                <a href="{{ producto.url }}">{{ producto.nombre }}</a> - 
+                Solo {{ producto.stock }} unidades restantes
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    {% if productos_agotados %}
+    <div class="alert-list">
+        <h4>❌ Productos Agotados</h4>
+        <ul>
+            {% for producto in productos_agotados %}
+            <li>
+                <a href="{{ producto.url }}">{{ producto.nombre }}</a> - 
+                Stock agotado
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <!-- Gráficos -->
+    <div class="charts-grid">
+        <div class="chart-container">
+            <h3>📈 Productos por Categoría</h3>
+            <canvas id="productosCategoria" height="250"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h3>📦 Stock por Categoría</h3>
+            <canvas id="stockCategoria" height="250"></canvas>
+        </div>
+    </div>
+    
+    <!-- Últimos movimientos -->
+    <div class="table-container">
+        <h3>🔄 Últimos Movimientos de Inventario</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mov in movimientos_recientes %}
+                <tr>
+                    <td>
+                        <a href="{% url 'admin:tienda_producto_change' mov.inventario.producto.id %}">
+                            {{ mov.inventario.producto.nombre }}
+                        </a>
+                        <br>
+                        <small style="color: #666;">
+                            {{ mov.inventario.talla }} / {{ mov.inventario.color }}
+                        </small>
+                    </td>
+                    <td>
+                        <span class="badge {% if mov.tipo == 'ENTRADA' %}entrada{% else %}salida{% endif %}">
+                            {{ mov.tipo }}
+                        </span>
+                    </td>
+                    <td>{{ mov.cantidad }}</td>
+                    <td>{{ mov.fecha|date:"d/m/Y H:i" }}</td>
+                    <td>{{ mov.observacion|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 30px; color: #666;">
+                        No hay movimientos recientes
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Acciones rápidas -->
+    <div class="quick-actions">
+        <h3>⚡ Acciones Rápidas</h3>
+        <div class="action-buttons">
+            <a href="{% url 'admin:tienda_producto_add' %}" class="action-btn">
+                ➕ Agregar Producto
+            </a>
+            <a href="{% url 'admin:tienda_proveedor_add' %}" class="action-btn">
+                👥 Agregar Proveedor
+            </a>
+            <a href="{% url 'admin:tienda_movimiento_add' %}" class="action-btn entrada">
+                📥 Registrar Entrada
+            </a>
+            <a href="{% url 'admin:tienda_movimiento_add' %}" class="action-btn salida">
+                📤 Registrar Salida
+            </a>
+            <a href="{% url 'admin:tienda_producto_changelist' %}" class="action-btn">
+                📋 Ver Todos los Productos
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Datos para JavaScript - Forma segura -->
+{{ productos_por_categoria|json_script:"productosPorCategoriaData" }}
+{{ stock_por_categoria|json_script:"stockPorCategoriaData" }}
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Obtener datos del JSON seguro
+    const productosPorCategoriaElement = document.getElementById('productosPorCategoriaData');
+    const stockPorCategoriaElement = document.getElementById('stockPorCategoriaData');
+    
+    const productosPorCategoria = JSON.parse(productosPorCategoriaElement.textContent);
+    const stockPorCategoria = JSON.parse(stockPorCategoriaElement.textContent);
+    
+    // Gráfico de productos por categoría
+    const productosCtx = document.getElementById('productosCategoria').getContext('2d');
+    const productosLabels = Object.keys(productosPorCategoria);
+    const productosData = Object.values(productosPorCategoria);
+    
+    new Chart(productosCtx, {
+        type: 'bar',
+        data: {
+            labels: productosLabels,
+            datasets: [{
+                label: 'Cantidad de Productos',
+                data: productosData,
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { 
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Cantidad de Productos'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Categorías'
+                    }
+                }
+            }
+        }
+    });
+
+    // Gráfico de stock por categoría
+    const stockCtx = document.getElementById('stockCategoria').getContext('2d');
+    const stockLabels = Object.keys(stockPorCategoria);
+    const stockData = Object.values(stockPorCategoria);
+    
+    new Chart(stockCtx, {
+        type: 'doughnut',
+        data: {
+            labels: stockLabels,
+            datasets: [{
+                label: 'Stock Total',
+                data: stockData,
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                    '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución de Stock'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

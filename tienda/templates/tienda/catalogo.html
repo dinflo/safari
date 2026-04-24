@@ -1,0 +1,245 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Catálogo de Productos{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'tienda/css/catalogo.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="catalog-wrapper">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{% url 'inicio' %}">Inicio</a>
+        <span class="separator">/</span>
+        <span class="current">Catálogo de Productos</span>
+    </nav>
+
+    <section class="catalogo-container">
+        <!-- SIDEBAR DE FILTROS -->
+        <aside class="catalogo-filtros">
+            <div class="filtros-header">
+                <h3>Filtros</h3>
+                <a href="{% url 'catalogo' %}" class="limpiar-filtros">Limpiar Todo</a>
+            </div>
+
+            <div class="filtro-seccion">
+                <h4 class="filtro-titulo">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    Buscar Producto
+                </h4>
+                <form method="get" class="busqueda-form" action="{% url 'catalogo' %}">
+                    <input type="text" name="q" placeholder="Buscar producto..." class="busqueda-input"
+                        value="{{ request.GET.q }}">
+                    <button type="submit" class="busqueda-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                    </button>
+                    {% if request.GET.categoria %}
+                    <input type="hidden" name="categoria" value="{{ request.GET.categoria }}">
+                    {% endif %}
+                </form>
+            </div>
+        </aside>
+
+        <!-- GRID DE PRODUCTOS -->
+        <div class="catalogo-main">
+            <div class="catalogo-header">
+                <div class="catalogo-acciones">
+                    <div class="ordenar-container">
+                        <label for="ordenarPor">Ordenar por:</label>
+                        <select name="ordenar" id="ordenarPor" class="ordenar-select">
+                            <option value="nombre-asc" {{ sort_selected.nombre_asc }}>Nombre (A-Z)</option>
+                            <option value="nombre-desc" {{ sort_selected.nombre_desc }}>Nombre (Z-A)</option>
+                            <option value="precio-asc" {{ sort_selected.precio_asc }}>Precio: Menor a Mayor</option>
+                            <option value="precio-desc" {{ sort_selected.precio_desc }}>Precio: Mayor a Menor</option>
+                            <option value="reciente" {{ sort_selected.reciente }}>Más Recientes</option>
+                        </select>
+                    </div>
+
+                    <div class="vista-toggle">
+                        <button class="vista-btn activa" data-vista="grid" title="Vista de Cuadrícula">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="3" y="3" width="7" height="7" rx="1" />
+                                <rect x="14" y="3" width="7" height="7" rx="1" />
+                                <rect x="14" y="14" width="7" height="7" rx="1" />
+                                <rect x="3" y="14" width="7" height="7" rx="1" />
+                            </svg>
+                        </button>
+                        <button class="vista-btn" data-vista="lista" title="Vista de Lista">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6" />
+                                <line x1="8" y1="12" x2="21" y2="12" />
+                                <line x1="8" y1="18" x2="21" y2="18" />
+                                <line x1="3" y1="6" x2="3.01" y2="6" />
+                                <line x1="3" y1="12" x2="3.01" y2="12" />
+                                <line x1="3" y1="18" x2="3.01" y2="18" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="catalogo-grid" id="catalogoGrid"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem;">
+                {% for producto in productos %}
+                <article class="card-premium producto-card"
+                    style="display: flex; flex-direction: column; height: 100%;">
+                    <div
+                        style="position: absolute; top: 1rem; left: 1rem; z-index: 10; display: flex; flex-direction: column; gap: 0.5rem;">
+                        {% if producto.en_oferta %}
+                        <span
+                            style="background: var(--danger); color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700;">OFERTA</span>
+                        {% endif %}
+                        {% if not producto.tiene_stock %}
+                        <span
+                            style="background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700;">AGOTADO</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="producto-imagen"
+                        style="position: relative; aspect-ratio: 1/1; overflow: hidden; background: #f1f5f9;">
+                        {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}"
+                            style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                        {% else %}
+                        <div
+                            style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                <polyline points="21 15 16 10 5 21" />
+                            </svg>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="producto-info" style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                        <span
+                            style="color: var(--accent); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                            {{ producto.categoria.nombre }}
+                        </span>
+                        <h3 class="producto-nombre"
+                            style="font-size: 1.125rem; margin-bottom: 0.75rem; font-weight: 600; color: var(--primary);">
+                            {{ producto.nombre }}
+                        </h3>
+
+                        <div style="margin-top: auto;">
+                            <div style="display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1rem;">
+                                <span style="font-size: 1.25rem; font-weight: 700; color: var(--primary);">
+                                    S/ {{ producto.precio_final }}
+                                </span>
+                                {% if producto.en_oferta %}
+                                <span
+                                    style="text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem;">
+                                    S/ {{ producto.precio }}
+                                </span>
+                                {% endif %}
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                                {% if producto.slug %}
+                                <a href="{% url 'producto_detalle' producto.slug %}" class="btn-primary"
+                                    style="font-size: 0.8rem; justify-content: center; padding: 0.6rem;">Ver Detalle</a>
+                                {% else %}
+                                <a href="{% url 'producto_detalle_por_id' producto.id %}" class="btn-primary"
+                                    style="font-size: 0.8rem; justify-content: center; padding: 0.6rem;">Ver Detalle</a>
+                                {% endif %}
+                                <form action="{% url 'carrito_agregar' producto.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-accent"
+                                        style="width: 100%; font-size: 0.8rem; padding: 0.6rem; transition: all 0.2s;"
+                                        {% if not producto.tiene_stock %}disabled
+                                        style="opacity: 0.5; cursor: not-allowed;" {% endif %}>
+                                        Comprar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="sin-productos" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem;">
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                        style="color: var(--text-muted); margin-bottom: 2rem;">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <h3 style="font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem;">No hay productos
+                        disponibles</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                        {% if request.GET.q %}
+                        No encontramos productos que coincidan con "{{ request.GET.q }}"
+                        {% elif request.GET.categoria %}
+                        No hay productos en la categoría "{{ request.GET.categoria }}"
+                        {% else %}
+                        No hay productos disponibles en este momento
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'catalogo' %}" class="btn-primary"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="1 4 1 10 7 10" />
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                        </svg>
+                        Ver todos los productos
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const vistaBotones = document.querySelectorAll('.vista-btn');
+        const catalogoGrid = document.getElementById('catalogoGrid');
+
+        vistaBotones.forEach(btn => {
+            btn.addEventListener('click', function () {
+                vistaBotones.forEach(b => b.classList.remove('activa'));
+                this.classList.add('activa');
+                const vista = this.dataset.vista;
+                if (vista === 'lista') {
+                    catalogoGrid.classList.add('vista-lista');
+                } else {
+                    catalogoGrid.classList.remove('vista-lista');
+                }
+                localStorage.setItem('vistaPreferida', vista);
+            });
+        });
+
+        const vistaGuardada = localStorage.getItem('vistaPreferida');
+        if (vistaGuardada === 'lista') {
+            catalogoGrid.classList.add('vista-lista');
+            vistaBotones.forEach(btn => {
+                btn.classList.remove('activa');
+                if (btn.dataset.vista === 'lista') btn.classList.add('activa');
+            });
+        }
+
+        const ordenarSelect = document.getElementById('ordenarPor');
+        if (ordenarSelect) {
+            ordenarSelect.addEventListener('change', function () {
+                const url = new URL(window.location.href);
+                url.searchParams.set('ordenar', this.value);
+                window.location.href = url.toString();
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "tienda/base.html" %}
+{% load static %}
+
+{% block title %}Pedido Confirmado - LuxeStock{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 5rem auto; text-align: center; padding: 0 1rem;">
+    <div style="margin-bottom: 3rem;">
+        <div
+            style="width: 100px; height: 100px; background: #ecfdf5; color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
+        </div>
+        <h1 style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;">¡Gracias por tu compra!</h1>
+        <p style="font-size: 1.25rem; color: var(--text-muted);">Tu pedido ha sido procesado con éxito y el stock ha
+            sido actualizado.</p>
+    </div>
+
+    <div class="card-premium" style="background: white; padding: 3rem; margin-bottom: 3rem; text-align: left;">
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;">
+            <h2 style="font-size: 1.5rem; color: var(--primary); margin: 0;">Resumen del Pedido #{{ orden.id }}</h2>
+            <span
+                style="background: #f1f5f9; color: var(--primary); padding: 0.5rem 1rem; border-radius: 20px; font-weight: 700; font-size: 0.9rem;">
+                ESTADO: {{ orden.get_estado_display|upper }}
+            </span>
+        </div>
+
+        <div style="display: grid; gap: 1.5rem; margin-bottom: 2rem;">
+            {% for item in orden.items.all %}
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <span style="font-weight: 600; color: var(--primary);">{{ item.cantidad }}x</span>
+                    <div>
+                        <p style="margin: 0; font-weight: 600;">{{ item.producto.nombre }}</p>
+                        {% if item.variante %}
+                        <small style="color: var(--text-muted);">{{ item.variante.talla.nombre }} / {{
+                            item.variante.color.nombre }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                <span style="font-weight: 700;">S/ {{ item.precio }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div
+            style="border-top: 2px solid var(--primary); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">TOTAL:</span>
+            <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">S/ {{ orden.total }}</span>
+        </div>
+
+        <div
+            style="margin-top: 2.5rem; background: #fffbeb; padding: 1.5rem; border-radius: 12px; border-left: 4px solid #fbbf24;">
+            <h4 style="margin: 0 0 0.5rem; color: #78350f;">Información de Envío</h4>
+            <p style="margin: 0; color: #92400e; font-size: 0.95rem;">
+                {{ orden.nombre_completo }}<br>
+                {{ orden.direccion }}, {{ orden.ciudad }}<br>
+                Telf: {{ orden.telefono }}
+            </p>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 1rem; justify-content: center;">
+        <a href="{% url 'catalogo' %}" class="btn-primary" style="padding: 1rem 3rem;">
+            Seguir Comprando
+        </a>
+        <button onclick="window.print()" class="btn-secondary"
+            style="padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9" />
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                <rect x="6" y="14" width="12" height="8" />
+            </svg>
+            Imprimir Comprobante
+        </button>
+    </div>
+</div>
+{% endblock %}
